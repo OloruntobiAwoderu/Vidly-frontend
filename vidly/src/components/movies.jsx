@@ -42,7 +42,13 @@ class Movies extends Component {
     this.setState({ selectedGenre: genre, currentPage: 1 });
   };
   handleSort = path => {
-    this.setState({ sortColumn: { path, order: 'asc'} })
+    const sortColumn = {...this.state.sortColumn};
+    if(sortColumn.path === path) sortColumn.order = (sortColumn.order === 'asc') ? 'desc' : 'asc';
+    else {
+      sortColumn.path = path;
+      sortColumn.order = 'asc'
+    }
+    this.setState({ sortColumn });
   }
   render() {
     if (this.state.movies.length === 0)
