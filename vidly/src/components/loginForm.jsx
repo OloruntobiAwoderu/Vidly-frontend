@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import joi from 'joi-browser';
+import joi from "joi-browser";
 import Input from "./common/input";
 class LoginForm extends Component {
   state = {
@@ -8,19 +8,23 @@ class LoginForm extends Component {
   };
 
   schema = {
-      username: joi.string().required(),
-      password: joi.string().required()
-  }
+    username: joi
+      .string()
+      .required()
+      .label("Username"),
+    password: joi
+      .string()
+      .required()
+      .label("Password")
+  };
   validate = () => {
-    const result = joi.validate(this.state.account, this.schema, { abortEarly: false})
-    console.log(result)
+    const options = { abortEarly: false };
+    const result = joi.validate(this.state.account, this.schema, options);
+    if (!result.error) return null;
+
     const errors = {};
-    const { account } = this.state;
-    if (account.username.trim() === "")
-      errors.username = "Username is required";
-    if (account.password.trim() === "")
-      errors.password = "Password is required";
-    return Object.keys(errors).length === 0 ? null : errors;
+    for (let item of result.error.details) errors[item.path[0]] = item.message;
+    return errors;
   };
   handleSubmit = e => {
     e.preventDefault();
@@ -30,21 +34,19 @@ class LoginForm extends Component {
   };
 
   validateProperty = input => {
-      if (input.name === "username"){
-          if (input.value.trim() === '') return 'username is required'
-      }
-      if (input.name === "password"){
-        if (input.value.trim() === '') return 'password is required'
+    if (input.name === "username") {
+      if (input.value.trim() === "") return "username is required";
     }
-  }
+    if (input.name === "password") {
+      if (input.value.trim() === "") return "password is required";
+    }
+  };
   handleChange = ({ currentTarget: input }) => {
-    const errors = {...this.state.errors}
+    const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
-    if(errorMessage) errors[input.name] = errorMessage
-    else delete errors[input.name]
-    
-    
-    
+    if (errorMessage) errors[input.name] = errorMessage;
+    else delete errors[input.name];
+
     const account = { ...this.state.account };
     account[input.name] = input.value;
     this.setState({ account, errors });
