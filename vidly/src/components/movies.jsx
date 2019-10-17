@@ -80,7 +80,7 @@ class Movies extends Component {
           />
         </div>
         <div className="col">
-          <Link to={this.state.movies._id === undefined ? `/movies/new` : `/movies/${this.state.movies._id}`}>
+          <Link to='/movies/new'>
             <button className="btn btn-primary lg">New Movie</button>
           </Link>
           <p>Showing {totalCount} movies in the database</p>
