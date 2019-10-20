@@ -1,14 +1,31 @@
 
-import Axios from 'axios';
-import config from "../config.json"
+import { apiUrl } from "../config.json";
+import Axios from "axios";
 
-export const getMovies = () => {
-    return Axios.get(`${config.apiUrl}/movies`)
+const apiEndpoint = apiUrl + "/movies";
+
+function movieUrl(id) {
+  return `${apiEndpoint}/${id}`;
 }
- 
 
-
-export const deleteMovie = (movieId) => {
-    return Axios.delete(`${config.apiUrl}/movies/${movieId}`)
+export function getMovies() {
+  return Axios.get(apiEndpoint);
 }
- 
+
+export function getMovie(movieId) {
+  return Axios.get(movieUrl(movieId));
+}
+
+export function saveMovie(movie) {
+  if (movie._id) {
+    const body = { ...movie };
+    delete body._id;
+    return Axios.put(movieUrl(movie._id), body);
+  }
+
+  return Axios.post(apiEndpoint, movie);
+}
+
+export function deleteMovie(movieId) {
+  return Axios.delete(movieUrl(movieId));
+}

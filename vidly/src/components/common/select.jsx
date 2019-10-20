@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-
+import React from "react";
 
 const Select = ({ name, label, options, error, ...rest }) => {
   return (
@@ -8,7 +7,7 @@ const Select = ({ name, label, options, error, ...rest }) => {
       <select name={name} id={name} {...rest} className="form-control">
         <option value="" />
         {options.map(option => (
-          <option value={option._id} key={option._id}>
+          <option key={option._id} value={option._id}>
             {option.name}
           </option>
         ))}
