@@ -10,6 +10,7 @@ import LoginForm from "./components/loginForm";
 import RegistrationForm from "./components/registrationForm";
 import Logout from "./components/logout";
 import { getCurrentUser } from "./services/authService";
+import ProtectedRoute from "./components/common/protectedRoute";
 
 class App extends Component {
   state = {};
@@ -28,12 +29,9 @@ class App extends Component {
             <Route path="/login" component={LoginForm} />
             <Route path="/logout" component={Logout} />
             <Route path="/register" component={RegistrationForm} />
-            <Route
+            <ProtectedRoute
               path="/movies/:id"
-              render={props => {
-                if (!user) return <Redirect to="/login" />;
-                return <MovieForm {...props} />;
-              }}
+              component={MovieForm}
             />
             <Route
               path="/movies"
