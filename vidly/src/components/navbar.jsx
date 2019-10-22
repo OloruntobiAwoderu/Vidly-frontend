@@ -22,7 +22,7 @@ const Navbar = ({ user }) => {
           <NavLink className="nav-link nav-item" to="/movies">
             Movies <span className="sr-only">(current)</span>
           </NavLink>
-          ]
+          
           <NavLink className="nav-link nav-item" to="/customers">
             Customers
           </NavLink>
