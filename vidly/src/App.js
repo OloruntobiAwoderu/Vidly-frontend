@@ -9,16 +9,17 @@ import MovieForm from "./components/movieForm";
 import LoginForm from "./components/loginForm";
 import RegistrationForm from "./components/registrationForm";
 import Logout from "./components/logout";
-import { getCurrentUser } from './services/authService'
+import { getCurrentUser } from "./services/authService";
 
 class App extends Component {
   state = {};
 
   componentDidMount() {
-  const user = getCurrentUser();
-   this.setState({ user });
+    const user = getCurrentUser();
+    this.setState({ user });
   }
   render() {
+    const { user } = this.state;
     return (
       <React.Fragment>
         <Navbar user={this.state.user} />
@@ -27,8 +28,17 @@ class App extends Component {
             <Route path="/login" component={LoginForm} />
             <Route path="/logout" component={Logout} />
             <Route path="/register" component={RegistrationForm} />
-            <Route path="/movies/:id" component={MovieForm} />
-            <Route path="/movies" component={Movies} />
+            <Route
+              path="/movies/:id"
+              render={props => {
+                if (!user) return <Redirect to="/login" />;
+                return <MovieForm {...props} />;
+              }}
+            />
+            <Route
+              path="/movies"
+              render={props => <Movies {...props} user={user} />}
+            />
             <Route path="/customers" component={Customers} />
             <Route path="/rentals" component={Rentals} />
             <Route path="/not-found" component={NotFound} />

@@ -19,9 +19,9 @@ class Movies extends Component {
     sortColumn: { path: "title", order: "asc" }
   };
 
- async componentDidMount() {
-    const { data } = await getGenres()
-  
+  async componentDidMount() {
+    const { data } = await getGenres();
+
     const genres = [{ _id: "", name: "All Genres" }, ...data];
 
     const { data: movies } = await getMovies();
@@ -32,18 +32,17 @@ class Movies extends Component {
   }
 
   handleDelete = async movie => {
-const orignalMovies = this.state.movies;
+    const orignalMovies = this.state.movies;
 
     const movies = orignalMovies.filter(m => m._id !== movie._id);
     this.setState({ movies });
-  try{
-    await deleteMovie(movie._id);
-  } catch(error){
-    if(error.response && error.response.status === 404)
-    alert("Movie has been deleted")
-    this.setState({ movies: orignalMovies})
-  }
-   
+    try {
+      await deleteMovie(movie._id);
+    } catch (error) {
+      if (error.response && error.response.status === 404)
+        alert("Movie has been deleted");
+      this.setState({ movies: orignalMovies });
+    }
   };
   handleLike = movie => {
     const movies = [...this.state.movies];
@@ -90,6 +89,7 @@ const orignalMovies = this.state.movies;
   };
 
   render() {
+    const { user } = this.props;
     if (this.state.movies.length === 0)
       return <p>There are no movies in the database.</p>;
     const { totalCount, data } = this.getPagedData();
@@ -103,9 +103,11 @@ const orignalMovies = this.state.movies;
           />
         </div>
         <div className="col">
-          <Link to="/movies/new">
-            <button className="btn btn-primary lg">New Movie</button>
-          </Link>
+          {user && (
+            <Link to="/movies/new" >
+              <button style={{ marginBottom: 20 }} className="btn btn-primary lg">New Movie</button>
+            </Link>
+          )}
           <p>Showing {totalCount} movies in the database</p>
           <SearchBox onChange={this.handleSearch} value={this.searchQuery} />
           <MoviesTable
